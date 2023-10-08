@@ -3,6 +3,8 @@ package com.example.LmsSpringBoot.LibraryManagementSystem.controller;
 
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.CardStatus;
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Gender;
+import com.example.LmsSpringBoot.LibraryManagementSystem.dto.requestDto.StudentRequestDto;
+import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.StudentResponseDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.LibraryCard;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Student;
 import com.example.LmsSpringBoot.LibraryManagementSystem.service.StudentService;
@@ -27,27 +29,22 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addStudent(@RequestBody() Student theStudent){
+    public ResponseEntity addStudent(@RequestBody() StudentRequestDto theStudent){
 
-        LibraryCard theLibraryCard= new LibraryCard();
-        theLibraryCard.setCardNo(String.valueOf(UUID.randomUUID()));
-        theLibraryCard.setStudent( theStudent);
-        theLibraryCard.setCardStatus(CardStatus.ACTIVATED);
 
-        theStudent.setLibraryCard(theLibraryCard);
 
-        Student result = theStudentService.addStudent( theStudent );
+        StudentResponseDto result = theStudentService.addStudent( theStudent );
 
-        return new ResponseEntity<>( "studen added success", HttpStatus.CREATED);
+        return new ResponseEntity<>( result, HttpStatus.CREATED);
     }
 
     @GetMapping("/{Id}")
     public ResponseEntity getStudent(@PathVariable int Id){
 
-        Student result =  theStudentService.getStudent( Id );
+        StudentResponseDto result =  theStudentService.getStudent( Id );
 
         return new ResponseEntity(
-                "result "+result.getName()+" "+result.getEmail(),
+                result,
                 HttpStatus.FOUND
         );
 
@@ -57,7 +54,7 @@ public class StudentController {
     @GetMapping("/mail/{mail}")
     public ResponseEntity getStudentByEmail(@PathVariable  String mail){
 
-        Student result = theStudentService.getStudentByEmail( mail );
+        StudentResponseDto result = theStudentService.getStudentByEmail( mail );
 
         return new ResponseEntity("student info => "+result.getEmail()+ " name "+result.getName(), HttpStatus.FOUND );
     }

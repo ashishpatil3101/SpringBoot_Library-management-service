@@ -1,11 +1,14 @@
 package com.example.LmsSpringBoot.LibraryManagementSystem.controller;
 
+import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Genre;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Book;
 import com.example.LmsSpringBoot.LibraryManagementSystem.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/book")
@@ -22,11 +25,18 @@ public class BookController {
     @PostMapping("/add")
     public ResponseEntity addBook( @RequestBody  Book theBook){
 
-        Book result = theBookService.AddBook( theBook );
+        try {
+            Book result = theBookService.AddBook( theBook );
+            return new ResponseEntity<>(
+                    "Book added succesfully.book detail.title"+result.getTitle()+" cost "
+                            +result.getCost(), HttpStatus.CREATED );
+        }
+        catch (Exception e) {
 
-        return new ResponseEntity<>(
-                "Book added succesfully.book detail.title"+result.getTitle()+" cost "
-        +result.getCost(), HttpStatus.CREATED );
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
     @GetMapping("/{id}")
@@ -39,5 +49,13 @@ public class BookController {
                         result.getAuthor(),
                 HttpStatus.FOUND
         );
+    }
+
+    @GetMapping("/genre")
+    public ResponseEntity getBooksByGenre( @RequestParam("TheGenre") Genre TheGenre){
+
+        List<String > result = theBookService.getBooksByGenre( TheGenre );
+
+        return new ResponseEntity<>( result , HttpStatus.FOUND);
     }
 }
