@@ -1,6 +1,7 @@
 package com.example.LmsSpringBoot.LibraryManagementSystem.controller;
 
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Genre;
+import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.BookResponseDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Book;
 import com.example.LmsSpringBoot.LibraryManagementSystem.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,14 @@ public class BookController {
         List<String > result = theBookService.getBooksByGenre( TheGenre );
 
         return new ResponseEntity<>( result , HttpStatus.FOUND);
+    }
+
+    @GetMapping("/genreAndPrice")
+    public ResponseEntity getByGenreAndCostGreaterThen(@RequestParam("genre") String genre,@RequestParam("cost") double cost ){
+
+        System.out.println(genre+" "+cost);
+        List<BookResponseDto> result= theBookService.FindByGenreAndCostGreaterthan(genre,cost );
+
+        return new ResponseEntity(result, HttpStatus.OK );
     }
 }

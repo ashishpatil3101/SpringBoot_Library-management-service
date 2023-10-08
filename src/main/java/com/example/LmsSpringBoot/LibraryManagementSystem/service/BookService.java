@@ -1,10 +1,12 @@
 package com.example.LmsSpringBoot.LibraryManagementSystem.service;
 
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Genre;
+import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.BookResponseDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Author;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Book;
 import com.example.LmsSpringBoot.LibraryManagementSystem.repository.AuthorRepository;
 import com.example.LmsSpringBoot.LibraryManagementSystem.repository.BookRepository;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@NoArgsConstructor
 public class BookService {
 
     BookRepository theBookRepository;
@@ -61,5 +64,26 @@ public class BookService {
 
         return listOftitle;
 
+    }
+
+    public List<BookResponseDto> FindByGenreAndCostGreaterthan(String genre, double cost){
+
+        List<Book> responseFromRepo = theBookRepository.findByGenreAndCost( genre, cost);
+
+        List<BookResponseDto> SendBackResponse = new ArrayList<>();
+
+        for( Book book : responseFromRepo ){
+
+            BookResponseDto newBookResponse=  new BookResponseDto();
+            newBookResponse.setTitle( book.getTitle());
+            newBookResponse.setAuthor( book.getAuthor().getName());
+            newBookResponse.setCost( book.getCost());
+            newBookResponse.setGenre( book.getGenre());
+
+            SendBackResponse.add( newBookResponse );
+
+        }
+
+        return SendBackResponse;
     }
 }
