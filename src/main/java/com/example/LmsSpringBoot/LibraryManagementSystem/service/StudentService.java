@@ -2,6 +2,7 @@ package com.example.LmsSpringBoot.LibraryManagementSystem.service;
 
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.CardStatus;
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Gender;
+import com.example.LmsSpringBoot.LibraryManagementSystem.Tranformers.StudentTrasnformer;
 import com.example.LmsSpringBoot.LibraryManagementSystem.dto.requestDto.StudentRequestDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.StudentResponseDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.LibraryCard;
@@ -30,11 +31,13 @@ public class StudentService {
 
     public StudentResponseDto addStudent(StudentRequestDto theStudent){
 
-        Student newStudent = new Student();
-        newStudent.setAge(theStudent.getAge());
-        newStudent.setEmail(theStudent.getEmail());
-        newStudent.setName(theStudent.getName());
-        newStudent.setGender(theStudent.getGender());
+//        Student newStudent = new Student();
+//        newStudent.setAge(theStudent.getAge());
+//        newStudent.setEmail(theStudent.getEmail());
+//        newStudent.setName(theStudent.getName());
+//        newStudent.setGender(theStudent.getGender());
+
+        Student newStudent = StudentTrasnformer.studentREquestToStudent( theStudent);
 
         LibraryCard theLibraryCard= new LibraryCard();
         theLibraryCard.setCardNo(String.valueOf(UUID.randomUUID()));
@@ -61,11 +64,12 @@ public class StudentService {
 
             Student result = result1.get();
             LibraryCard theLabCard= result.getLibraryCard();
-            StudentResponseDto result2 = new StudentResponseDto();
-            result2.setEmail(result.getEmail());
-            result2.setName(result.getName());
-            result2.setMessage("Your record Fetched succesfully");
-            result2.setLibraryCardNo(theLabCard.getCardNo());
+//            StudentResponseDto result2 = new StudentResponseDto();
+//            result2.setEmail(result.getEmail());
+//            result2.setName(result.getName());
+//            result2.setMessage("Your record Fetched succesfully");
+//            result2.setLibraryCardNo(theLabCard.getCardNo());
+            StudentResponseDto result2 = StudentTrasnformer.StudentToStudentResposneDto(result);
 
             return result2;
         }
@@ -78,11 +82,13 @@ public class StudentService {
         Student result =TheStudentRepository.findByEmail( mail );
 
         LibraryCard theLabCard= result.getLibraryCard();
-        StudentResponseDto result2 = new StudentResponseDto();
-        result2.setEmail(result.getEmail());
-        result2.setName(result.getName());
-        result2.setMessage("Your record Fetched succesfully");
-        result2.setLibraryCardNo(theLabCard.getCardNo());
+//        StudentResponseDto result2 = new StudentResponseDto();
+//        result2.setEmail(result.getEmail());
+//        result2.setName(result.getName());
+//        result2.setMessage("Your record Fetched succesfully");
+//        result2.setLibraryCardNo(theLabCard.getCardNo());
+        StudentResponseDto result2 = StudentTrasnformer.StudentToStudentResposneDto( result );
+
 
         return result2;
 
