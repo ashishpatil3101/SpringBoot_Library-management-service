@@ -32,4 +32,12 @@ public class TransactionController {
 
 
     }
+    @PutMapping("/return/bookId/{bookId}/stdId/{studentId}")
+    public ResponseEntity returnABook(@PathVariable int bookId, @PathVariable int studentId){
+
+       String result=  theTransactionService.returnABook( bookId , studentId);
+
+        return new ResponseEntity<>( result,HttpStatus.ACCEPTED );
+    }
+
 }

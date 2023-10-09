@@ -5,6 +5,7 @@ import com.example.LmsSpringBoot.LibraryManagementSystem.Tranformers.BookTransfo
 import com.example.LmsSpringBoot.LibraryManagementSystem.Tranformers.StudentTrasnformer;
 import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.issueBookResponse;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Book;
+import com.example.LmsSpringBoot.LibraryManagementSystem.model.LibraryCard;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Student;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Transaction;
 import com.example.LmsSpringBoot.LibraryManagementSystem.repository.BookRepository;
@@ -73,4 +74,38 @@ public class TransactionService {
                 .build();
     }
 
+    public String returnABook(int bookId ,int studentId) {
+
+        Optional<Book> optionalBook= theBookRepository.findById( bookId) ;
+        Optional<Student> optionalStudent = theStudentRepository.findById( studentId );
+
+        Book book = optionalBook.get();
+        LibraryCard libraryCard = optionalStudent.get().getLibraryCard();
+
+        Transaction newTransaction = Transaction.builder()
+                        .transactionStatus(TransactionStatus.SUCCESS)
+                        .libraryCard(libraryCard)
+                         .transactionNumber(String.valueOf(UUID.randomUUID()))
+                        .book(book)
+                        .build();
+        //create new transaction
+        Transaction savedTransaction = theTransactionRepository.save(newTransaction);
+        //save trasaction for book
+        book.getTransactions().add( savedTransaction);
+        //returned so make it false
+        book.setIssued( false);
+
+        //save the book
+        theBookRepository.save(book);
+
+        //student
+        libraryCard.getTransactions().add(savedTransaction);
+        //save student
+        theStudentRepository.save( optionalStudent.get());
+
+        return "Book "+book.getTitle()+" has returned succesfully by student "+optionalStudent.get().getName();
+
+
+
+    }
 }
