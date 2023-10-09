@@ -27,10 +27,9 @@ public class BookController {
     public ResponseEntity addBook( @RequestBody  Book theBook){
 
         try {
-            Book result = theBookService.AddBook( theBook );
+            BookResponseDto result = theBookService.AddBook( theBook );
             return new ResponseEntity<>(
-                    "Book added succesfully.book detail.title"+result.getTitle()+" cost "
-                            +result.getCost(), HttpStatus.CREATED );
+                    result, HttpStatus.CREATED );
         }
         catch (Exception e) {
 
@@ -43,11 +42,10 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity  getBook(@PathVariable int id){
 
-        Book result = theBookService.getBook( id );
+        BookResponseDto result = theBookService.getBook( id );
 
         return new ResponseEntity<>(
-                "title -"+result.getTitle()+" author is"+
-                        result.getAuthor(),
+                result,
                 HttpStatus.FOUND
         );
     }

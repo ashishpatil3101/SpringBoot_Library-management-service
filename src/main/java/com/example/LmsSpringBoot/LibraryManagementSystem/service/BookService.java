@@ -1,6 +1,7 @@
 package com.example.LmsSpringBoot.LibraryManagementSystem.service;
 
 import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Genre;
+import com.example.LmsSpringBoot.LibraryManagementSystem.Tranformers.BookTransformer;
 import com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto.BookResponseDto;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Author;
 import com.example.LmsSpringBoot.LibraryManagementSystem.model.Book;
@@ -27,7 +28,7 @@ public class BookService {
         this.theAuthorReposotory = theAuthorReposotory;
     }
 
-    public Book AddBook(Book theBook) throws Exception {
+    public BookResponseDto AddBook(Book theBook) throws Exception {
 
 
         Optional<Author> optionalAuthor = theAuthorReposotory.findById( theBook.getAuthor().getId() );
@@ -41,15 +42,17 @@ public class BookService {
         optionalAuthor.get().getBooks().add(theBook);
 
        theAuthorReposotory.save( optionalAuthor.get());
-        return theBook;
+
+       BookResponseDto result = BookTransformer.prpareBookResponseDtoFromBook( theBook );
+        return result;
 
     }
 
-    public Book getBook(int id){
+    public BookResponseDto getBook(int id){
 
         Optional<Book> result = theBookRepository.findById(id );
 
-        if(result.isPresent() )return result.get();
+        if(result.isPresent() )return BookTransformer.prpareBookResponseDtoFromBook( result.get());
 
         return null;
     }
@@ -74,11 +77,7 @@ public class BookService {
 
         for( Book book : responseFromRepo ){
 
-            BookResponseDto newBookResponse=  new BookResponseDto();
-            newBookResponse.setTitle( book.getTitle());
-            newBookResponse.setAuthor( book.getAuthor().getName());
-            newBookResponse.setCost( book.getCost());
-            newBookResponse.setGenre( book.getGenre());
+            BookResponseDto newBookResponse= BookTransformer.prpareBookResponseDtoFromBook( book);
 
             SendBackResponse.add( newBookResponse );
 

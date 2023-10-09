@@ -1,9 +1,9 @@
 package com.example.LmsSpringBoot.LibraryManagementSystem.dto.responseDto;
 
-import com.example.LmsSpringBoot.LibraryManagementSystem.Enum.Genre;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,17 +11,13 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class BookResponseDto {
+public class issueBookResponse {
 
+    StudentResponseDto student;
 
-    String title;
-    Genre genre;
+    BookResponseDto book;
 
-    String author;
+    String transactionNumber;
 
-    double cost;
-
-    int NoOfPages;
-
-
+    Date trasactionTime;
 }

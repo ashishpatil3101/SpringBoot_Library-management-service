@@ -16,6 +16,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Transaction {
 
 
